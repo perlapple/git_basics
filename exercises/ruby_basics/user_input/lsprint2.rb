@@ -4,7 +4,7 @@ def valid_number?(number_string)
 end
 
 def quit?(choice)
-  choice == 'q'
+  choice == 'q' || choice == 'Q'
 end
 
 def enough_lines?(number_of_lines)
@@ -12,9 +12,8 @@ def enough_lines?(number_of_lines)
 end
 
 def print_lines(number_of_lines)
-  while number_of_lines > 0
-    puts 'Launch School is the best!'
-    number_of_lines -= 1
+  for i in 1..number_of_lines do
+    puts "Launch School is the best!"
   end
 end
 
