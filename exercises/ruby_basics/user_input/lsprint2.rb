@@ -8,11 +8,11 @@ def quit?(choice)
 end
 
 def enough_lines?(number_of_lines)
-  number_of_lines < 3
+  number_of_lines >= 3
 end
 
 def print_lines(number_of_lines)
-  for i in 1..number_of_lines do
+  number_of_lines.times do
     puts "Launch School is the best!"
   end
 end
@@ -24,11 +24,11 @@ loop do
   if valid_number?(choice)
     choice = choice.to_i
     if enough_lines?(choice)
-      puts ">> That's not enough lines."
-    else
       print_lines(choice)
+    else
+      puts ">> That's not enough lines."
     end
   elsif quit?(choice)
-      break
+    break
   end
 end
