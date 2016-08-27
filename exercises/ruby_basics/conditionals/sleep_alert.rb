@@ -1,0 +1,1 @@
+status = ['awake', 'tired'].sample
