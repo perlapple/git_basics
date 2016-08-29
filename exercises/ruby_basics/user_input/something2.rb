@@ -14,7 +14,7 @@ loop do
 
 end
 
-# other way to do it
+# launch shchool's solution
 
 # choice = nil
 # loop do
