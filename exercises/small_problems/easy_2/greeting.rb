@@ -3,7 +3,7 @@ def greeting_a_user(name)
   if name.chars.last == '!'
     "HELLO #{name.upcase}. WHY ARE WE SCREAMING?"
   else
-    "Hello #{name}"
+    "Hello #{name.chop}"
   end
 end
 
