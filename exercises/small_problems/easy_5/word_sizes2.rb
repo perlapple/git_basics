@@ -1,9 +1,17 @@
+
 def word_sizes(sentence)
+
+  puts sentence = cleanup(sentence)
+
   words_sizes = Hash.new{0}
   sentence.split.map do |word|
     words_sizes[word.size] += 1
   end
   words_sizes
+end
+
+def cleanup(sentence)
+  sentence.gsub(/[^a-zA-Z]+/, ' ')
 end
 
 puts word_sizes('Four score and seven.') #== { 3 => 1, 4 => 1, 5 => 1, 6 => 1 }
