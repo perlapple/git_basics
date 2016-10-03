@@ -1,0 +1,66 @@
+write out pseudo-code (both casual and formal) that does the following:
+
+################################################################################
+#### A method that returns the sum of two integers
+
+####Casual
+
+Given two integers.
+  Sum the two integers
+  print the result
+
+####Formal
+
+START
+
+  SET number_1 = 1
+  SET number_2 = 2
+
+  SET result = number_1 + number_2
+
+  PRINT result
+
+END
+
+################################################################################
+#### A method that takes an array of strings, and returns a string that is all those strings concatenated together
+
+####Casual
+
+  Given an array of string
+  for each value in the array, concatenate the value
+  After iterating through the array, return the string concatenated.
+
+  #### Formal
+
+START
+
+SET iterator = 1
+SET array_of_strings = a collection of strings
+SET string_concatenated =
+
+WHILE iterator < length of array
+  SET string_concatenated = string_concatenated + current_value_of_array
+  iterator = iterator + 1
+
+PRINT string_concatenated
+
+END
+
+################################################################################
+####a method that takes an array of integers, and returns a new array with every other element
+
+####Casual
+
+  Given an array of integers.
+  Assign the values of the array to a new array
+  print the array
+
+#### Formal
+
+  START
+
+  SET array = collection of integers
+  SET new_array = array
+
+  END
