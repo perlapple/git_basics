@@ -1,38 +1,56 @@
 # calculator
 
+require 'yaml'
+MESSAGES = YAML.load_file('calculator_messages.yml')
+
+puts MESSAGES.inspect
+
 def prompt(message)
   puts "=> #{message}"
 end
 
 result = nil
-number_1 = nil
-number_2 = nil
+number1 = nil
+number2 = nil
 name = nil
 operation = nil
 
-def operation_to_message(operation)
- case operation
- when '1'
-   'Adding'
- when '2'
-   'Substracting'
- when '3'
-   'Multiplying'
- when '4'
-   'Dividing'
- end
+def integer?(input)
+  input.to_i.to_s == input
+end
+
+def float?(input)
+  Float(input) rescue false
+end
+
+def interpolated_message(message_name, value)
+  MESSAGES['es'][message_name].gsub("{var}", value)
+end
+
+def number2(operation)
+  word  = case operation
+          when '1'
+            'Adding'
+          when '2'
+            'Substracting'
+          when '3'
+            'Multiplying'
+          when '4'
+            'Dividing'
+          end
+  word
 end
 
 def valid_number?(number)
-  number != 0
+  number.nonzero?
 end
 
 loop do
-  prompt "Welcome to calculator. Enter your name:"
+  prompt(MESSAGES['es']['welcome'])
   name = gets.chomp.to_s
 
   if name.empty?
-    prompt "Make sure you use a valid name."
+    prompt 'Make sure you use a valid name.'
   else
     break
   end
@@ -40,58 +58,58 @@ end
 
 loop do # mail loop
   loop do
-    prompt "Enter number 1:"
-    number_1 = gets.chomp.to_i
+    prompt(MESSAGES['es']['number_1'])
+    number1 = gets.chomp.to_i
 
-    if valid_number?(number_1)
+    if valid_number?(number1)
       break
     else
-      prompt "Hmm, that's not a valid number"
+      prompt(MESSAGES['es']['not_valid_number'])
     end
-
   end
 
   loop do
-    prompt "Enter number 2:"
-    number_2 = gets.chomp.to_i
+    prompt(MESSAGES['es']['number_2'])
+    number2 = gets.chomp.to_i
 
-    if valid_number?(number_2)
+    if valid_number?(number2)
       break
     else
-      prompt "Hmm, that's not a valid number"
+      prompt(MESSAGES['es']['not_valid_number'])
     end
-
   end
 
   loop do
-    prompt "Select operation to perform:\n 1. Add\n 2. Subtract\n 3. Multiply\n 4. Divide"
+    prompt(MESSAGES['es']['select_operation'])
     operation = gets.chomp.to_s
 
     if %w(1 2 3 4).include?(operation)
       break
     else
-      prompt "You must choose 1,2,3 or 4"
+      prompt(MESSAGES['es']['reminder'])
     end
+
   end
 
-  prompt "#{operation_to_message(operation)} two numbers."
+  #prompt "#{number2(operation)} two numbers."
+  prompt(interpolated_message("operation", number2(operation)))
 
   result = case operation
-    when '1'
-      number_1 + number_2
-    when '2'
-      number_1 - number_2
-    when '3'
-      number_1 * number_2
-    when '4'
-      number_1 / number_2
-  end
+           when '1'
+             number1 + number2
+           when '2'
+             number1 - number2
+           when '3'
+             number1 * number2
+           when '4'
+             number1 / number2
+           end
 
-  prompt "The result is: #{result} "
-  prompt "Do you want another operation? (Y to continue)"
+  prompt(interpolated_message("result", result.to_s))
+  prompt(MESSAGES['es']['continue'])
+
   awnser = gets.chomp.to_s
-  break unless awnser.downcase.start_with?('y')
-
+  break unless awnser.downcase.start_with?('y') || awnser.downcase.start_with?('s')
 end
 
-prompt "Thank you #{name} for using calculator "
+prompt(interpolated_message("thanks", name))

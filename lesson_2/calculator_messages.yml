@@ -1,0 +1,28 @@
+# calculator_messages.yml
+
+en:
+  welcome: "Welcome to Calculator! Enter your name"
+  valid_name: "Make sure to end a valid name."
+  not_valid_number: "Hmm, that's not a valid number"
+  select_operation: "Select operation:\n 1)Add\n 2)Subtract\n 3)Multiply\n 4)Divide"
+  reminder:      "prompt 'You must choose 1,2,3 or 4"
+  result: "The result is: {var}"
+  continue: "Do you want another operation? (Y to continue)"
+  thanks: "Thank you {var} for using calculator!"
+  operation: "{var} two numbers."
+  number_1: "Enter number 1:"
+  number_2: "Enter number 2:"
+es:
+    welcome: "Bienvenido a la calculadora! Entre su nombre"
+    valid_name: "Asegura de entrar un nombre válido"
+    not_valid_number: "Hmm, Ese no es un número valido"
+    select_operation: "Selecctiona la operacion:\n 1)Sumar\n 2)Restar\n 3)Multiplicar\n 4)Dividir"
+    reminder:      "Elije 1,2,3 or 4"
+    result: "El resultado es: {var}"
+    continue: "Quieres hacer otra operacion? (S para continuar)"
+    thanks: "Gracias {var} por usar calculadora!"
+    operation: "{var} dos numeros"
+    number_1: "Entra numero 1:"
+    number_2: "Entra numero 2:"
+
+# ... rest of file omitted for brevity
