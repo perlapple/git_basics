@@ -12,7 +12,16 @@ WIN_COMBINATIONS = [
   [2, 4, 6]
 ].freeze
 
-@board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+def reset_score
+  @score = {
+    'player' => 0,
+    'computer' => 0
+  }
+end
+
+def reset_board
+  @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+end
 
 def display_board(board)
   puts " #{board[0]} | #{board[1]} | #{board[2]}"
@@ -71,25 +80,44 @@ def ask_position
   position - 1
 end
 
+def match_winner
+  @score.key(5)
+end
+
+def calculate_score(winner)
+  @score[winner] += 1
+end
+
+reset_board
+
 loop do
+  reset_score
   loop do
     user_mark(ask_position)
+    puts "You have choose"
     display_board(@board)
 
-    if winner?('0')
+    if winner?('O')
+      calculate_score('player')
+      reset_board
       puts 'Congrats, you have won'
-      break
     elsif winner?('X')
-      puts 'Uh no, machine won'
-      break
+      calculate_score('computer')
+      reset_board
+      puts 'Uh no, computer won'
     elsif board_full?
+      reset_board
       puts 'It\'s a tie!'
-      break
     else
+      puts "Computer choose"
       machine_mark(obtain_machine_position)
+      display_board(@board)
     end
 
-    break if board_full?
+    if match_winner
+      puts "Score: #{@score}... The winner is: #{match_winner}"
+      break
+    end
   end
 
   puts 'Do you want to play again?'
