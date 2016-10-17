@@ -35,13 +35,32 @@ def a_valid_position?(position)
   position.to_s.to_i == position && position.between?(1, 9) && @board[position - 1] == ' '
 end
 
-def obtain_machine_position
-  posibilities = []
-  @board.each_with_index do |value, position|
-    posibilities << position if value == ' '
+def find_at_risk_square
+  square_at_risk = nil
+
+  WIN_COMBINATIONS.each do |line|
+    next unless @board.values_at(*line).count('O') == 2
+    @board.each_with_index do |mark, index|
+      square_at_risk = index if line.include?(index) && mark == ' '
+    end
   end
 
-  posibilities.sample
+  square_at_risk
+end
+
+def obtain_machine_position
+  posibilities = []
+
+  square = find_at_risk_square
+
+  unless square
+    @board.each_with_index do |value, position|
+      posibilities << position if value == ' '
+    end
+    square = posibilities.sample
+  end
+
+  square
 end
 
 def user_mark(position)
@@ -88,30 +107,35 @@ def calculate_score(winner)
   @score[winner] += 1
 end
 
+def print_winner(winner)
+  calculate_score(winner)
+  reset_board
+  puts "#{winner} have won!"
+end
+
 reset_board
+display_board(@board)
+find_at_risk_square
 
 loop do
   reset_score
   loop do
     user_mark(ask_position)
-    puts "You have choose"
+    puts 'You have choose'
     display_board(@board)
 
     if winner?('O')
-      calculate_score('player')
-      reset_board
-      puts 'Congrats, you have won'
+      print_winner('player')
     elsif winner?('X')
-      calculate_score('computer')
-      reset_board
-      puts 'Uh no, computer won'
+      print_winner('computer')
     elsif board_full?
       reset_board
       puts 'It\'s a tie!'
     else
-      puts "Computer choose"
+      puts 'Computer choose'
       machine_mark(obtain_machine_position)
       display_board(@board)
+      print_winner('computer') if winner?('X')
     end
 
     if match_winner
