@@ -48,16 +48,38 @@ def find_at_risk_square
   square_at_risk
 end
 
+def find_defense_square
+  square = nil
+
+  WIN_COMBINATIONS.each do |line|
+    next unless @board.values_at(*line).count('X') == 2
+    @board.each_with_index do |mark, index|
+      square = index if line.include?(index) && mark == ' '
+    end
+  end
+
+  square
+end
+
+def square_5?
+  @board[5] == ' '
+end
+
 def obtain_machine_position
   posibilities = []
 
-  square = find_at_risk_square
+  square = find_defense_square
+  square = find_at_risk_square unless find_defense_square
 
   unless square
-    @board.each_with_index do |value, position|
-      posibilities << position if value == ' '
+    if square_5?
+      square = 4
+    else
+      @board.each_with_index do |value, position|
+        posibilities << position if value == ' '
+        square = posibilities.sample
+      end
     end
-    square = posibilities.sample
   end
 
   square
@@ -120,9 +142,16 @@ find_at_risk_square
 loop do
   reset_score
   loop do
+
     user_mark(ask_position)
-    puts 'You have choose'
+    puts 'You have chosen:'
     display_board(@board)
+
+    unless board_full?
+      puts 'The computer has chosen'
+      machine_mark(obtain_machine_position)
+      display_board(@board)
+    end
 
     if winner?('O')
       print_winner('player')
@@ -131,11 +160,6 @@ loop do
     elsif board_full?
       reset_board
       puts 'It\'s a tie!'
-    else
-      puts 'Computer choose'
-      machine_mark(obtain_machine_position)
-      display_board(@board)
-      print_winner('computer') if winner?('X')
     end
 
     if match_winner
