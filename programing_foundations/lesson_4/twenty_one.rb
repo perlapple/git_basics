@@ -1,4 +1,6 @@
 
+WHATEVER = 21
+
 VALUES = {
   'A' => [1, 11],
   'J' => [10],
@@ -27,7 +29,7 @@ def total(cards)
 
   # correct for Aces
   values.select { |value| value == 'ace' }.count.times do
-    sum -= 10 if sum > 21
+    sum -= 10 if sum > WHATEVER
   end
 
   sum
@@ -59,23 +61,23 @@ def hit_or_stay?
   loop do
     puts 'Would you like to (h)it or (s)tay?'
     player_turn = gets.chomp.downcase
-    break if %w(h s).include?(player_turn)
+    break if %w(h s)  .include?(player_turn)
     puts 'Sorry, must enter h or s.'
   end
   player_turn
 end
 
 def busted?(player_cards)
-  total(player_cards) > 21
+  total(player_cards) > WHATEVER
 end
 
 def detect_result(dealer_cards, player_cards)
   player_total = total(player_cards)
   dealer_total = total(dealer_cards)
 
-  if player_total > 21
+  if player_total > WHATEVER
     :player_busted
-  elsif dealer_total > 21
+  elsif dealer_total > WHATEVER
     :dealer_busted
   elsif dealer_total < player_total
     :player
@@ -86,23 +88,6 @@ def detect_result(dealer_cards, player_cards)
   end
 end
 
-def display_result(dealer_cards, player_cards)
-  player_total = total(player_cards)
-  dealer_total = total(dealer_cards)
-
-  if player_total > 21
-    puts 'You busted! Dealer wins!'
-  elsif dealer_total > 21
-    puts 'Dealer busted! You win!'
-  elsif dealer_total < player_total
-    puts 'You win!'
-  elsif dealer_total > player_total
-    puts 'Dealer wins!'
-  else
-    puts 'It\'s a tie!'
-  end
-end
-
 def play_again?
   puts '-------------'
   puts 'Do you want to play again? (y or n)'
@@ -110,66 +95,129 @@ def play_again?
   answer.downcase.start_with?('y')
 end
 
-loop do
-  player_cards  = []
-  dealer_cards  = []
-  deck = shuffle_deck
+def reset_score
+  @score = {
+    'player' => 0,
+    'dealer' => 0
+  }
+end
 
-  puts 'Welcome to 21!'
+def match_winner
+  @score.key(5)
+end
 
-  player_cards << deal_card(deck) << deal_card(deck)
-  dealer_cards << deal_card(deck) << deal_card(deck)
+def calculate_score(winner)
+  @score[winner] += 1
+end
 
-  print_player(player_cards)
-  print_dealer(dealer_cards)
+def display_result(dealer_cards, player_cards)
+  player_total = total(player_cards)
+  dealer_total = total(dealer_cards)
 
-  # player turn
-  loop do
-    player_turn = hit_or_stay?
-
-    if player_turn == 'h'
-      player_cards << deal_card(deck)
-      puts 'You chose to hit!'
-      puts "Your cards are now: #{player_cards}"
-      puts "Your total is now: #{total(player_cards)}"
-    end
-
-    break if player_turn == 's' || busted?(player_cards)
-  end
-
-  if busted?(player_cards)
-    display_result(dealer_cards, player_cards)
-    play_again? ? next : break
+  if player_total > WHATEVER
+    calculate_score('dealer')
+    puts 'You busted! Dealer wins!'
+  elsif dealer_total > WHATEVER
+    calculate_score('player')
+    puts 'Dealer busted! You win!'
+  elsif dealer_total < player_total
+    calculate_score('player')
+    puts 'You win!'
+  elsif dealer_total > player_total
+    calculate_score('dealer')
+    puts 'Dealer wins!'
   else
-    puts "You stayed at #{total(player_cards)}"
+    puts 'It\'s a tie!'
   end
+end
 
-  # dealer turn
-  puts 'Dealer turn...'
-
-  loop do
-    break if busted?(dealer_cards) || total(dealer_cards) >= 17
-
-    puts 'Dealer hits!'
-    dealer_cards << deck.pop
-    puts "Dealer's cards are now: #{dealer_cards}"
-  end
-
-  if busted?(dealer_cards)
-    puts "Dealer total is now: #{total(dealer_cards)}"
-    display_result(dealer_cards, player_cards)
-    play_again? ? next : break
-  else
-    puts "Dealer stays at #{total(dealer_cards)}"
-  end
-
+def compare_cards(player_cards, dealer_cards)
   # both player and dealer stays - compare cards!
   puts '=============='
   puts "Dealer has #{dealer_cards}, for a total of: #{total(dealer_cards)}"
   puts "Player has #{player_cards}, for a total of: #{total(player_cards)}"
   puts '=============='
 
-  display_result(dealer_cards, player_cards)
+#  display_result(dealer_cards, player_cards)
 
-  break unless play_again?
+end
+
+
+reset_score
+loop do
+  loop do
+    player_cards  = []
+    dealer_cards  = []
+    deck = shuffle_deck
+
+    puts '###############################################################'
+    puts 'Welcome to Whatever-One!'
+
+    player_cards << deal_card(deck) << deal_card(deck)
+    dealer_cards << deal_card(deck) << deal_card(deck)
+
+    print_player(player_cards)
+    print_dealer(dealer_cards)
+
+    # player turn
+    loop do
+      player_turn = hit_or_stay?
+
+      if player_turn == 'h'
+        player_cards << deal_card(deck)
+        puts 'You chose to hit!'
+        puts "Your cards are now: #{player_cards}"
+        puts "Your total is now: #{total(player_cards)}"
+      end
+
+      break if player_turn == 's' || busted?(player_cards)
+    end
+
+    if busted?(player_cards)
+      display_result(dealer_cards, player_cards)
+#      compare_cards(dealer_cards, player_cards)
+#      play_again? ? next : break
+       break
+    else
+      puts "You stayed at #{total(player_cards)}"
+    end
+
+    # dealer turn
+    puts 'Dealer turn...'
+
+    loop do
+      break if busted?(dealer_cards) || total(dealer_cards) >= 17
+
+      puts 'Dealer hits!'
+      dealer_cards << deck.pop
+      puts "Dealer's cards are now: #{dealer_cards}"
+    end
+
+    dealer_total = total(dealer_cards)
+
+    if busted?(dealer_cards)
+      puts "Dealer total is now: #{dealer_total}"
+      display_result(dealer_cards, player_cards)
+      break
+#      play_again? ? next : break
+    else
+      puts "Dealer stays at #{dealer_total}"
+    end
+
+    # both player and dealer stays - compare cards!
+    puts '=============='
+    puts "Dealer has #{dealer_cards}, for a total of: #{total(dealer_cards)}"
+    puts "Player has #{player_cards}, for a total of: #{total(player_cards)}"
+    puts '=============='
+
+    display_result(dealer_cards, player_cards)
+
+  end
+
+  if match_winner
+    puts "Score: #{@score}... The winner of 5 games is: #{match_winner}"
+    break
+  end
+
+#  play_again? ? next : break
 end
