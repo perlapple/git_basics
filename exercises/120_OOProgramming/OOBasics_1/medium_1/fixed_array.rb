@@ -1,26 +1,26 @@
+# class that implements a fixed-length array.
 class FixedArray
-  attr_accessor :fixed_array  
+  attr_accessor :fixed_array
 
   def initialize(size)
     @fixed_array = Array.new(size)
   end
-  
+
   def [](index)
     @fixed_array[index]
   end
 
   def []=(index, value)
-   @fixed_array[index] = value
+    @fixed_array[index] = value
   end
-  
+
   def to_a
     @fixed_array
   end
-  
+
   def to_s
-    "#{@fixed_array}"
+    @fixed_array.to_s
   end
-  
 end
 
 fixed_array = FixedArray.new(5)
