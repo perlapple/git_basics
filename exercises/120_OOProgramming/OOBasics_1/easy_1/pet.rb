@@ -6,13 +6,21 @@ class Pet
   end
 
   def to_s
-    @name.upcase!
-    "My name is #{@name}."
+    "My name is #{@name.upcase}."
   end
 end
 
 name = 'Fluffy'
-fluffy = Pet.new(name.dup)
+fluffy = Pet.new(name)
+puts fluffy.name
+puts fluffy
+puts fluffy.name
+puts name
+
+puts "-----------------"
+name = 42
+fluffy = Pet.new(name)
+name += 1
 puts fluffy.name
 puts fluffy
 puts fluffy.name

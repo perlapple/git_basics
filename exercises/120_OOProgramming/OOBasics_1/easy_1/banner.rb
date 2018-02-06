@@ -1,6 +1,5 @@
-
+# Banner Class
 class Banner
-
   def initialize(message)
     @message = message
   end
@@ -12,11 +11,10 @@ class Banner
   private
 
   def horizontal_rule
-   '+' + "-" * (message_line.size - 2) + '+'
+    '+' + '-' * (message_line.size - 2) + '+'
   end
 
-  def empty_line
-  end
+  def empty_line; end
 
   def message_line
     "| #{@message} |"

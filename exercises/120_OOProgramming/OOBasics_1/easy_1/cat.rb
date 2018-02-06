@@ -6,11 +6,11 @@ class Pet
 end
 
 class Cat < Pet
-  def initialize(name,age,color)
-    super(name,age)
+  def initialize(name, age, color)
+    super(name, age)
     @color = color
   end
-  
+
   def to_s
     "My cat #{@name} is #{@age} years old and has #{@color} fur."
   end

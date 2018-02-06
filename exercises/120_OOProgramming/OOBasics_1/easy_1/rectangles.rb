@@ -11,7 +11,7 @@ end
 
 class Square < Rectangle
   def initialize(height)
-    super(height,height)
+    super(height, height)
   end
 end
 
