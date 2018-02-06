@@ -4,9 +4,9 @@ module Mailable
     puts "#{address}"
     puts "#{city}, #{state} #{zipcode}"
   end
-end
+end 
 
-class Customer 
+class Customer
   attr_reader :name, :address, :city, :state, :zipcode
   include Mailable
 end
@@ -16,7 +16,7 @@ class Employee
   include Mailable
 end
 
-betty = Customer.new 
+betty = Customer.new
 bob = Employee.new
 betty.print_address
 bob.print_address
