@@ -1,13 +1,11 @@
 # class that implements a fixed-length array.
 class FixedArray
-  attr_accessor :fixed_array
-
   def initialize(size)
     @fixed_array = Array.new(size)
   end
 
   def [](index)
-    @fixed_array[index]
+    @fixed_array.fetch(index)
   end
 
   def []=(index, value)
@@ -19,12 +17,12 @@ class FixedArray
   end
 
   def to_s
-    @fixed_array.to_s
+    to_a.to_s
   end
 end
 
 fixed_array = FixedArray.new(5)
-puts fixed_array[3] == nil
+puts fixed_array[3].nil?
 puts fixed_array.to_a == [nil] * 5
 
 fixed_array[3] = 'a'
@@ -42,7 +40,6 @@ puts fixed_array.to_a == [nil, 'c', nil, 'a', nil]
 fixed_array[4] = 'd'
 puts fixed_array[4] == 'd'
 puts fixed_array.to_a == [nil, 'c', nil, 'a', 'd']
-puts fixed_array.to_s == '[nil, "c", nil, "a", "d"]'
 
 puts fixed_array[-1] == 'd'
 puts fixed_array[-4] == 'c'
@@ -60,3 +57,5 @@ begin
 rescue IndexError
   puts true
 end
+
+puts fixed_array.to_s == '[nil, "c", nil, "a", "d"]'
