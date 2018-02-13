@@ -9,6 +9,8 @@ class Wallet
     amount <=> other_wallet.amount
   end
 
+  protected
+  
   attr_reader :amount
 end
 

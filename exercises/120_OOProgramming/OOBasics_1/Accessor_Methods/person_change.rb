@@ -1,11 +1,9 @@
-# # Modify the following code to accept a string containing a first and last name. The name should be split into two instance variables in the setter method, then joined in the getter method to form a full name.
-
+# # Accept a string containing a first and last name.
 class Person
-
   def name=(name)
-     @firstname, @lastname = name.split(' ')
+    @firstname, @lastname = name.split(' ')
   end
-  
+
   def name
     @firstname + ' ' + @lastname
   end

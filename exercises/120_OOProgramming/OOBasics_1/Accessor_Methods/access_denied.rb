@@ -8,10 +8,10 @@ class Person
     @phone_number = number
   end
 
-  private
-  def phone_number=(phone)
-    @phone_number = phone
-  end
+  # private
+  # def phone_number=(phone)
+  #   @phone_number = phone
+  # end
 
 end
 

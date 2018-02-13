@@ -1,6 +1,5 @@
 # Graduate students have the option to use on-campus parking, while Undergraduate students do not.
 # Graduate and Undergraduate students have a name and year associated with them.
-
 class Student
   def initialize(name, year)
     @name = name

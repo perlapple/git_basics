@@ -1,3 +1,4 @@
+# Create two classes - Truck and Car - that both inherit from Vehicle.
 class Vehicle
   attr_reader :year
 
@@ -18,7 +19,6 @@ class Car < Vehicle
   end
 end
 
-puts "hi"
 truck1 = Truck.new(1994)
 puts truck1.year
 
