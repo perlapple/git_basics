@@ -1,7 +1,7 @@
 
 class Participant
   attr_accessor :cards, :total
-  
+
   def initialize
     @cards = []
     @total = 0
@@ -15,39 +15,40 @@ class Participant
   end
 
   def busted?
-    calculate_total(self.cards) > 21
+    total > 21
   end
 
-  def calculate_total(cards)
-    values = cards.map { |card| card.rank }
-   
+  def total
+    sum = 0
+
+    values = self.cards.map { |card| card.rank }
     values.each do |value|
       if value == "A"
-        @total += 11
+        sum += 11
       elsif value.to_i == 0 # J, Q, K
-        @total += 10
+        sum += 10
       else
-        @total += value.to_i
+        sum += value.to_i
       end
     end
 
     # correct for Aces
     values.select { |value| value == "A" }.count.times do
-      @total -= 10 if @total > 21
+      sum -= 10 if sum > 21
     end
 
-    self.total
+    sum
   end
-  
+
   def print_cards
     self.cards.map(&:rank).join(', ')
   end
-  
+
 end
 
 class Player < Participant
   attr_reader :choice
-  
+
   def ask_hit_or_stay
     loop do
       puts "Would you like to (h)it or (s)tay?"
@@ -67,18 +68,18 @@ class Deck
   RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'].freeze
 
   attr_reader :cards
-  
+
   def initialize
     @cards = []
   end
-  
+
   def shuffle
     SUITS.each { |suit|
       RANKS.each {|rank|
         @cards << Card.new(suit, rank)
       }
     }
-    
+
     @cards.shuffle!
   end
 
@@ -89,7 +90,7 @@ end
 
 class Card
   attr_reader :suit, :rank
-  
+
   def initialize(suit, rank)
     @suit = suit
     @rank = rank
@@ -98,87 +99,82 @@ end
 
 
 class Game
-  
+
   def initialize
     @deck = Deck.new.shuffle
     @player = Player.new
     @dealer = Dealer.new
   end
-  
+
   def start
       deal_cards
       show_initial_cards
       player_turn
       dealer_turn
-    # show_result
+      show_result
   end
-  
+
   def deal_cards
     2.times do
       @player.cards << @deck.pop
       @dealer.cards << @deck.pop
     end
   end
-  
+
   def show_initial_cards
     puts "Dealer has: #{@dealer.cards.first.rank} and unknown card"
     puts "You have: #{@player.cards.first.rank} and #{@player.cards[1].rank}"
   end
-  
+
   def player_turn
      loop do
        @player.ask_hit_or_stay
-    
+
        if @player.choice == 'h'
        @player.hit(@deck)                          ################################# @player.cards << deck.pop
          puts "You chose to hit!"
          puts "Your cards are now: #{@player.print_cards}"
+         puts "Your cards are now: #{@player.total}"
        end
 
        break if @player.choice == 's' || @player.busted?
     end
   end
-  
+
   def dealer_turn
     loop do
-      puts "#######################"
-      puts  @dealer.total
       break if @dealer.total >= 17
 
-      puts "Dealer hits!"
+      puts "\n Dealer hits!"
       @dealer.hit(@deck) #@dealer.cards << deck.pop
       puts "Dealer's cards are now: #{@dealer.print_cards}"
     end
 
     if @dealer.busted?
       puts "Dealer total is now: #{@dealer.total}"
-  #    show_result
     else
       puts "Dealer stays at #{@dealer.total}"
     end
   end
-  
+
   def show_result
     result = detect_result
-  
+
     case result
     when :player_busted
-      prompt "You busted! Dealer wins!"
+      puts "You busted! Dealer wins!"
     when :dealer_busted
-      prompt "Dealer busted! You win!"
+      puts "Dealer busted! You win!"
     when :player
-      prompt "You win!"
+      puts "You win!"
     when :dealer
-      prompt "Dealer wins!"
+      puts "Dealer wins!"
     when :tie
-      prompt "It's a tie!"
+      puts "It's a tie!"
     end
   end
-  
+
   def detect_result
-    puts "@player.total #{@player.total}"
-    puts "@dealer.total #{@player.total}"
-        
     if @player.total > 21
       :player_busted
     elsif @dealer.total > 21
